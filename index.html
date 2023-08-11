@@ -11,7 +11,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="css/leaflet.css" />
     <link rel="stylesheet" href="css/L.Control.Locate.min.css" />
-    <link rel="stylesheet" href="css/qgis2web.css" />
     <link rel="stylesheet" href="css/fontawesome-all.min.css" />
     <link rel="stylesheet" href="css/leaflet-search.css" />
     <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css" />
@@ -26,12 +25,10 @@
   </head>
   <body>
     <div id="map"></div>
-    <script src="js/qgis2web_expressions.js"></script>
     <script src="js/leaflet.js"></script>
     <script src="js/L.Control.Locate.min.js"></script>
     <script src="js/leaflet.rotatedMarker.js"></script>
     <script src="js/leaflet.pattern.js"></script>
-    <script src="js/leaflet-hash.js"></script>
     <script src="js/Autolinker.min.js"></script>
     <script src="js/rbush.min.js"></script>
     <script src="js/labelgun.min.js"></script>
@@ -56,6 +53,7 @@
           });
         }
       }
+      // Here you can replace your images after making your custom tiles
       let osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "© OpenStreetMap",
       });
@@ -64,6 +62,7 @@
       let northEast = L.latLng(89.99346179538875, 180);
       let bounds = L.latLngBounds(southWest, northEast);
 
+      // Here you can restrict the map to users
       let map = L.map("map", {
         layers: [osm],
         minZoom: 2.3,
@@ -76,7 +75,6 @@
         ])
         .setView([20, 80], 4);
 
-      let hash = new L.Hash(map);
       let autolinker = new Autolinker({
         truncate: { length: 30, location: "smart" },
       });
@@ -205,20 +203,6 @@
         })
         .addTo(map);
       setBounds();
-
-      // map.on("click", function (e) {
-      //   alert(e.latlng);
-      // });
-      // map.addControl(
-      //   new L.Control.Search({
-      //     layer: layer_grid_0,
-      //     initial: false,
-      //     hideMarkerOnCollapse: true,
-      //     propertyName: "id",
-      //   })
-      // );
-      // document.getElementsByClassName("search-button")[0].className +=
-      //   " fa fa-binoculars";
     </script>
   </body>
 </html>
