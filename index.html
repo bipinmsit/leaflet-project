@@ -60,24 +60,22 @@
         attribution: "© OpenStreetMap",
       });
 
+      let southWest = L.latLng(-89.98155760646617, -180);
+      let northEast = L.latLng(89.99346179538875, 180);
+      let bounds = L.latLngBounds(southWest, northEast);
+
       let map = L.map("map", {
-        zoomControl: true,
         layers: [osm],
+        minZoom: 2.3,
+        maxBounds: bounds,
+        cursor: true,
       })
         .fitBounds([
           [-179.9999893869999994, -90.0],
           [180.0000106130000006, 90.0],
         ])
-        .setView([20, 80], 3);
-      // .fitBounds([
-      //   [-161.1153516083859, -247.88055182234777],
-      //   [214.75755600003137, 200.81490467289885],
-      // ]);
+        .setView([20, 80], 4);
 
-      // .fitBounds([
-      //   [-179.9999893869999994, -90.0],
-      //   [180.0000106130000006, 90.0],
-      // ]);
       let hash = new L.Hash(map);
       let autolinker = new Autolinker({
         truncate: { length: 30, location: "smart" },
@@ -112,52 +110,52 @@
         });
         let popupContent =
           '<table>\
-                    <tr>\
-                        <td colspan="2">' +
+                          <tr>\
+                              <td colspan="2">' +
           (feature.properties["id"] !== null
             ? `id: ${autolinker.link(
                 feature.properties["id"].toLocaleString()
               )}`
             : "") +
           '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' +
+                          </tr>\
+                          <tr>\
+                              <td colspan="2">' +
           (feature.properties["left"] !== null
             ? `left: ${autolinker.link(
                 feature.properties["left"].toLocaleString()
               )}`
             : "") +
           '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' +
+                          </tr>\
+                          <tr>\
+                              <td colspan="2">' +
           (feature.properties["top"] !== null
             ? `top: ${autolinker.link(
                 feature.properties["top"].toLocaleString()
               )}`
             : "") +
           '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' +
+                          </tr>\
+                          <tr>\
+                              <td colspan="2">' +
           (feature.properties["right"] !== null
             ? `right: ${autolinker.link(
                 feature.properties["right"].toLocaleString()
               )}`
             : "") +
           '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' +
+                          </tr>\
+                          <tr>\
+                              <td colspan="2">' +
           (feature.properties["bottom"] !== null
             ? `bottom: ${autolinker.link(
                 feature.properties["bottom"].toLocaleString()
               )}`
             : "") +
           "</td>\
-                    </tr>\
-                </table>";
+                          </tr>\
+                      </table>";
         layer.bindPopup(popupContent, { maxHeight: 400 });
       }
 
@@ -207,6 +205,10 @@
         })
         .addTo(map);
       setBounds();
+
+      // map.on("click", function (e) {
+      //   alert(e.latlng);
+      // });
       // map.addControl(
       //   new L.Control.Search({
       //     layer: layer_grid_0,
