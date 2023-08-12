@@ -65,15 +65,15 @@
       // Here you can restrict the map to users
       let map = L.map("map", {
         layers: [osm],
-        minZoom: 2.3,
+        minZoom: 7,
         maxBounds: bounds,
         cursor: true,
       })
-        .fitBounds([
-          [-179.9999893869999994, -90.0],
-          [180.0000106130000006, 90.0],
-        ])
-        .setView([20, 80], 4);
+        // .fitBounds([
+        //   [-179.9999893869999994, -90.0],
+        //   [180.0000106130000006, 90.0],
+        // ])
+        .setView([20, 80], 7);
 
       let autolinker = new Autolinker({
         truncate: { length: 30, location: "smart" },
@@ -98,70 +98,48 @@
         map.setMaxBounds(map.getBounds());
       }
       function pop_grid_0(feature, layer) {
-        layer.on({
-          mouseout: function (e) {
-            for (i in e.target._eventParents) {
-              e.target._eventParents[i].resetStyle(e.target);
-            }
-          },
-          mouseover: highlightFeature,
-        });
-        let popupContent =
-          '<table>\
-                          <tr>\
-                              <td colspan="2">' +
-          (feature.properties["id"] !== null
-            ? `id: ${autolinker.link(
-                feature.properties["id"].toLocaleString()
-              )}`
-            : "") +
-          '</td>\
-                          </tr>\
-                          <tr>\
-                              <td colspan="2">' +
-          (feature.properties["left"] !== null
-            ? `left: ${autolinker.link(
-                feature.properties["left"].toLocaleString()
-              )}`
-            : "") +
-          '</td>\
-                          </tr>\
-                          <tr>\
-                              <td colspan="2">' +
-          (feature.properties["top"] !== null
-            ? `top: ${autolinker.link(
-                feature.properties["top"].toLocaleString()
-              )}`
-            : "") +
-          '</td>\
-                          </tr>\
-                          <tr>\
-                              <td colspan="2">' +
-          (feature.properties["right"] !== null
-            ? `right: ${autolinker.link(
-                feature.properties["right"].toLocaleString()
-              )}`
-            : "") +
-          '</td>\
-                          </tr>\
-                          <tr>\
-                              <td colspan="2">' +
-          (feature.properties["bottom"] !== null
-            ? `bottom: ${autolinker.link(
-                feature.properties["bottom"].toLocaleString()
-              )}`
-            : "") +
-          "</td>\
-                          </tr>\
-                      </table>";
-        layer.bindPopup(popupContent, { maxHeight: 400 });
+        // console.log(layer);
+        if ((feature.properties.id > 100) & (feature.properties.id < 125)) {
+          layer.setStyle({
+            fillColor: "red",
+            fillOpacity: 0.2,
+          });
+
+          let popupContent = `
+        <div>
+          <h3>Plot Deatils ${feature.properties.id}</h1>
+          <div>Map Area/Data: ${feature.properties.MapArea}</div>
+          <div>Grid Ref: ${feature.properties.GridRef}</div>
+          <div>Type: ${feature.properties.Type}</div>
+          <div>Availability: ${feature.properties.Available}</div>
+          <div>Partner: ${feature.properties.Partner}</div>
+          <div>LandType: ${feature.properties.LandType}</div>
+        </div>
+                `;
+
+          layer.bindPopup(popupContent, { maxHeight: 300 });
+        }
+
+        // layer.on({
+        //   mouseout: function (e) {
+        //     for (i in e.target._eventParents) {
+        //       e.target._eventParents[i].resetStyle(e.target);
+        //     }
+        //   },
+        //   mouseover: highlightFeature,
+        // });
       }
 
-      function style_grid_0_0() {
+      function getColor(d) {
+        return (d > 200) & (d < 250) ? "blue" : "rgba(35,35,35,1.0)";
+      }
+
+      function style_grid_0_0(feature) {
         return {
           pane: "pane_grid_0",
           opacity: 1,
           color: "rgba(35,35,35,1.0)",
+          fillColor: getColor(feature.properties.id),
           dashArray: "",
           lineCap: "square",
           lineJoin: "bevel",
